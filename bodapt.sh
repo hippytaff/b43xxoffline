@@ -3,10 +3,11 @@
 #   $$SH2NAME$$ Version 2.00.0
 #   $$DATE$$
 #
-#   Bod Installation Script: Bodhi 2.0 i686
+#   Adapted from the Bod Installation Script: Bodhi 2.0 i686
 #
 #   Bodhi Linux (c) 2012
-#   Authors : rbt y-lee, Jeff Hoogland
+#   Original Authors : rbt y-lee, Jeff Hoogland
+#   Adapted by : hippytaff
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -22,9 +23,9 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 BOD_NAME="Offline b43xx Module"
-APP_NAME="b43xx Module Installer"
+APP_NAME="bcmwl-kernel-source"
 APP_DESC="Offline installation of wl module for b43xx broadcom wireless chipset"
-PKG_LIST="bcmwil-kernel-source"
+PKG_LIST="bcmwl-kernel-source"
 MENU_STR="$$APPINSTR$$"
 
 rmAptCache(){
@@ -38,16 +39,15 @@ copyAptCache(){
     sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
     sudo cp sources.list /etc/apt/
     sudo cp -f lists/* /var/lib/apt/lists/
-    sudo cp *.deb /var/cache/apt/archives/ | zenity --window-icon=/usr/share/icons/bodhi.png --progress --pulsate --auto-kill --title="Bodhi Application Installer" --text="<i>Preparing Files...</i>" --width=600 2>/dev/null
+    sudo cp *.deb /var/cache/apt/archives/ 2>/dev/null
 }
 
 assert_package() {
     is_installed=$(apt-cache policy $APP_NAME | grep 'Installed: (none)' | wc -l)
     if [ "$is_installed" -eq "1" ]; then
         echo "Installation Failure!!"
-        zenity --window-icon=/usr/share/icons/bodhi.png --error --title="Bodhi Application Installer" --text="<b>${BOD_NAME^} Failed to Install</b>" 2>/dev/null
     else
-        zenity --window-icon=/usr/share/icons/bodhi.png --info --title="Bodhi Application Installer" --text="<b>${BOD_NAME^} Installed</b>\n$MENU_STR" 2>/dev/null
+        echo "${BOD_NAME^} Installed"
         apt-cache policy $APP_NAME
     fi
 }
@@ -63,7 +63,7 @@ if [ "$1" == debug ]; then
     echo "Moving data into apt cache"
     copyAptCache
     echo "Installing $APP_NAME via apt..."
-    sudo apt-get -y --force-yes --no-download --ignore-missing install $PKG_LIST | zenity --window-icon=/usr/share/icons/bodhi.png --text-info --title="Bodhi Application Installer" --width=800 --height=600 2>/dev/null
+    sudo apt-get -y --force-yes --no-download --ignore-missing install $PKG_LIST 2>/dev/null
     assert_package
     rmAptCache
     sudo cp /etc/apt/sources.list.bak /etc/apt/sources.list
@@ -75,7 +75,8 @@ if [ "$1" == debug ]; then
 fi
 
 copyAptCache
-sudo apt-get -y --force-yes --no-download --ignore-missing install $PKG_LIST 2>/dev/null | zenity --window-icon=/usr/share/icons/bodhi.png --progress --pulsate --auto-kill --title="Bodhi Application Installer" --text="<i>Installing ${BOD_NAME^}...</i>" --width=600 2>/dev/null
+sudo apt-get -y --force-yes --no-download --ignore-missing install $PKG_LIST 2>/dev/null
+echo "Installing ${BOD_NAME^}"
 load_mod
 assert_package
 rmAptCache
