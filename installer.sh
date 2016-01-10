@@ -21,10 +21,10 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-BOD_NAME="$$BODNAME$$"
-APP_NAME="$$APPNAME$$"
-APP_DESC="$$APPDESC$$"
-SCR_DIR=`dirname $BASH_SOURCE`
+BOD_NAME="b43xxinstaller"
+APP_NAME="bcmwl-kernel-soource"
+APP_DESC="Offline installation of wifi module for b43xx wifi chipsets"
+
 
 echo -e "\nBodhi Application Installer\n      ${BOD_NAME^}: $APP_DESC\n"
 
@@ -34,14 +34,6 @@ if [ -n "$ARCH" ]; then
   echo "FATAL ERROR: ARM Processor detected."
 
   zenity --window-icon=/usr/share/icons/bodhi.png --error --title "FATAL ERROR" --text "This bod file does not support\nthe cpu architecure detected.\n\nPlease Download the appropriate\nbod file for your machine." 2>/dev/null
-  echo "aborting installation ..."
-  exit 1
-fi
-
-RELEASE=`cat /etc/lsb-release | grep 10.04`
-if [ -n "$RELEASE" ]; then
-  echo "FATAL ERROR: Bodhi 1.x detected"
-  zenity --window-icon=/usr/share/icons/bodhi.png --error --title "FATAL ERROR" --text "This bod file only supports bodhi 2.0." 2>/dev/null
   echo "aborting installation ..."
   exit 1
 fi
@@ -64,7 +56,7 @@ fi
 
 zenity --window-icon=/usr/share/icons/bodhi.png --info --title="Bodhi Application Installer" --text="Click <b>OK</b> and enter your password to install $BOD_NAME" 2>/dev/null
 
-DO="bash $SCR_DIR/bodapt.sh $@"
+DO="./bodapt.sh $@"
 zenity --entry --title="Sudo Password" --text="Enter your password to perform administrative tasks:" --hide-text | sudo -S sudo $DO
 exit $?
 

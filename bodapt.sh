@@ -21,12 +21,11 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-BOD_NAME="$$BODNAME$$"
-APP_NAME="$$APPNAME$$"
-APP_DESC="$$APPDESC$$"
-PKG_LIST="$$APPLIST$$"
+BOD_NAME="Offline b43xx Module"
+APP_NAME="b43xx Module Installer"
+APP_DESC="Offline installation of wl module for b43xx broadcom wireless chipset"
+PKG_LIST="bcmwil-kernel-source"
 MENU_STR="$$APPINSTR$$"
-SCR_DIR=`dirname $BASH_SOURCE`
 
 rmAptCache(){
     sudo rm -rf /var/lib/apt/lists/*
@@ -53,14 +52,16 @@ assert_package() {
     fi
 }
 
-$$NCFUNCTION$$
+load_mod() {
+    sudo modprobe -r ssb wl brcmfmac brcmsmac bcma
+    sudo modprobe wl
+}
 
 rmAptCache
 
 if [ "$1" == debug ]; then
     echo "Moving data into apt cache"
     copyAptCache
-    $$NCSUB$$
     echo "Installing $APP_NAME via apt..."
     sudo apt-get -y --force-yes --no-download --ignore-missing install $PKG_LIST | zenity --window-icon=/usr/share/icons/bodhi.png --text-info --title="Bodhi Application Installer" --width=800 --height=600 2>/dev/null
     assert_package
@@ -74,9 +75,8 @@ if [ "$1" == debug ]; then
 fi
 
 copyAptCache
-$$NCSUB$$
 sudo apt-get -y --force-yes --no-download --ignore-missing install $PKG_LIST 2>/dev/null | zenity --window-icon=/usr/share/icons/bodhi.png --progress --pulsate --auto-kill --title="Bodhi Application Installer" --text="<i>Installing ${BOD_NAME^}...</i>" --width=600 2>/dev/null
-
+load_mod
 assert_package
 rmAptCache
 sudo cp /etc/apt/sources.list.bak /etc/apt/sources.list
