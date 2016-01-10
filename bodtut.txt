@@ -1,0 +1,18 @@
+mkdir liferea
+cd liferea/
+apt-get -qq --print-uris install liferea > liferea
+awk '{gsub("\x27", "", $0); print $1}' < liferea > liferea.sh
+wget -i liferea.sh
+
+We also need to copy the current apt sources so they can later be unziped onto the system you are installing on.
+
+cp -r /var/lib/apt/lists .
+cd ..
+makeself --nox11 --bzip2 /home/bodhi/liferea liferea.bod "Liferea RSS Reader" ./installer
+
+This should create a liferea.bod file in whatever directory you execute it in.
+
+If you want to use the installer script for another application and don't fancy manually changing the words liferea to whatever application you want to .bod then you can do
+sed -i 's/liferea/appname/gI' installer
+
+https://web.archive.org/web/20140704143524/http://wiki.bodhilinux.com/doku.php?id=bod_files_-_howto_build
