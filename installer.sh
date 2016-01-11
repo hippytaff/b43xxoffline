@@ -33,7 +33,7 @@ ARCH=`cat /proc/cpuinfo | grep ARM`
 if [ -n "$ARCH" ]; then
   echo "FATAL ERROR: ARM Processor detected."
 
-  zenity --window-icon=/usr/share/icons/bodhi.png --error --title "FATAL ERROR" --text "This bod file does not support\nthe cpu architecure detected.\n\nPlease Download the appropriate\nbod file for your machine." 2>/dev/null
+  echo "Sorry, this installer does not support\nthe cpu architecure detected."
   echo "aborting installation ..."
   exit 1
 fi
@@ -41,23 +41,21 @@ fi
 CPU_B=`/bin/uname -m | grep i686`
 if [ -z "$CPU_B" ]; then
   echo "FATAL ERROR: Cpu not supported"
-  zenity --window-icon=/usr/share/icons/bodhi.png --error --title "FATAL ERROR" --text "This bod file only supports 32 bit Bodhi." 2>/dev/null
   echo "aborting installation ..."
   exit 1
 fi
 
-zenity --window-icon=/usr/share/icons/bodhi.png --question --title="Bodhi Application Installer" --text="Would you like to install ${BOD_NAME^}: $APP_DESC?" 2>/dev/null
+echo "Would you like to install ${BOD_NAME^}: $APP_DESC?"
 
 if [ $? == 1 ]; then
-    zenity --window-icon=/usr/share/icons/bodhi.png --info --title="Bodhi Application Installer" --text="${BOD_NAME^}: $APP_DESC was <i>not</i> installed. Thanks for using Bodhi!" 2>/dev/null
     echo -e "${BOD_NAME^} installation aborted.\n"
     exit 1
 fi
 
-zenity --window-icon=/usr/share/icons/bodhi.png --info --title="Bodhi Application Installer" --text="Click <b>OK</b> and enter your password to install $BOD_NAME" 2>/dev/null
+echo "Please enter your password to install $BOD_NAME"
 
 DO="./bodapt.sh $@"
-zenity --entry --title="Sudo Password" --text="Enter your password to perform administrative tasks:" --hide-text | sudo -S sudo $DO
+echo "Please enter your password to perform administrative tasks:" sudo -S sudo $DO
 exit $?
 
 # All Wrongs Reserved.
