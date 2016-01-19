@@ -12,7 +12,7 @@ To load the wl module
 - $>sudo modprobe -r ssb -wl -brcmfmac -brcmsmac -bcma
 - $>sudo modprobe wl
 
-#Wireless networks should now be available.
+Wireless networks should now be available.
 
-#NB - this is for 32bit architecture. I will add 64bit in due course, eventhough I don't need it (Yet!)
+NB - this is for 32bit architecture. I will add 64bit in due course, eventhough I don't need it (Yet!)
 
