@@ -1,17 +1,16 @@
 # b43xxofline
 Offline installation of bcmwl-kernel-source for wireless chipset(s) b43xx.
 
-#Manual installation:
-$>sudo dpkg -i bcmwl-kernel-source.deb 
+Install using ./installer.sh
+- $>chmod +x installer.sh
+- $>./installer.sh
 
-#To load the wl module
+Manual installation:
+- $>sudo dpkg -i bcmwl-kernel-source.deb 
 
-$>sudo modprobe -r ssb -wl -brcmfmac -brcmsmac -bcma
-$>sudo modprobe wl
-
-#installer.sh script
-$>chmod +x installer.sh
-$>./installer.sh
+To load the wl module
+- $>sudo modprobe -r ssb -wl -brcmfmac -brcmsmac -bcma
+- $>sudo modprobe wl
 
 #Wireless networks should now be available.
 
