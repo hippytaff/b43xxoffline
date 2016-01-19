@@ -8,7 +8,7 @@ if [ "$CHKROOT" != "root" ]; then
     echo "Must be root... {sudo ./installer.sh}"
     exit
     else
-    sudo dpkg -i bcmwl-kernel-source.deb
+    sudo dpkg -i bcmwl-kernel-source*.deb
 fi
 
 if [ $? = "0" ]; then
